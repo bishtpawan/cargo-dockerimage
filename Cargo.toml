@@ -1,9 +1,9 @@
 [package]
-name = "cargo-docker"
+name = "cargo-dockerimage"
 version = "0.1.0"
 authors = ["bishtpawan <pawan.bisht@knoldus.in>"]
 license = "Apache-2.0"
-description = "A plugin for Rust to support Docker"
+description = "A cargo sub-commnad to create and build docker image"
 repository = "https://github.com/bishtpawan/cargo-docker"
 keywords = ["docker", "plugin"]
 edition = "2018"
