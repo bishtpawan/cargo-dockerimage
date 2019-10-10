@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["bishtpawan <pawan.bisht@knoldus.in>"]
 license = "Apache-2.0"
 description = "A cargo sub-commnad to create and build docker image"
-repository = "https://github.com/bishtpawan/cargo-docker"
+repository = "https://github.com/bishtpawan/cargo-dockerimage"
 keywords = ["docker", "plugin"]
 edition = "2018"
 

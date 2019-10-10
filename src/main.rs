@@ -11,7 +11,7 @@ pub static TOML_FILE_ERROR: &str = "Could Not Find `Cargo.toml`";
 pub static TOML_CONTENT_ERROR: &str = "Error while retrieving values from Toml's content";
 pub static COMMAND_LINE_ERROR: &str = "Please provide docker file's name as a command line argument";
 pub static RUST_LOG: &str = "RUST_LOG";
-pub static LOG_LEVEL: &str = "cargo_docker=info";
+pub static LOG_LEVEL: &str = "cargo_dockerimage=info";
 
 // This project is in the form of Cargo plugin which is used to create and build docker image.
 #[macro_use]
