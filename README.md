@@ -1,6 +1,6 @@
 # cargo-docker
 A Cargo Plugin for Rust to give support to Docker with Rust Programming.
-This plugin is supposed to create a docker file first and then bild a docker image from the created docker file..
+This plugin is supposed to create a docker file first and then build a docker image from the created docker file.
 As of now, this plugin works only for ubuntu (Linux Distribution).
 
 ## Install
