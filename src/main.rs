@@ -9,7 +9,8 @@ pub static TOML_PATH: &str = "./Cargo.toml";
 pub static DOCKER_COMMAND: &str = "docker";
 pub static TOML_FILE_ERROR: &str = "Could Not Find `Cargo.toml`";
 pub static TOML_CONTENT_ERROR: &str = "Error while retrieving values from Toml's content";
-pub static COMMAND_LINE_ERROR: &str = "Please provide docker file's name as a command line argument";
+pub static COMMAND_LINE_ERROR: &str =
+    "Please provide docker file's name as a command line argument";
 pub static RUST_LOG: &str = "RUST_LOG";
 pub static LOG_LEVEL: &str = "cargo_dockerimage=info";
 
@@ -28,14 +29,19 @@ fn main() {
                 Manifest::from_slice(&toml_content).expect(TOML_CONTENT_ERROR);
             if fs::File::open(DOCKER_FILE_PATH).is_err() {
                 match create_docker_file(&toml_values.package.unwrap().name) {
-                    Ok(success) => {
-                        info!("{}", success);
-                        info!("{}", build_docker_image(&docker_image_name, DOCKER_COMMAND))
+                    Ok(success) => info!("{}", success),
+                    Err(error) => {
+                        error!("{}", error);
+                        return;
                     }
-                    Err(error) => error!("{}", error),
                 }
-            } else {
-                info!("{}", build_docker_image(&docker_image_name, DOCKER_COMMAND))
+            }
+            match build_docker_image(&docker_image_name, DOCKER_COMMAND) {
+                Ok(success) => info!("{}", success),
+                Err(error) => {
+                    error!("{}", &error);
+                    return;
+                }
             }
         }
         Err(_error) => error!("{}", TOML_FILE_ERROR),
