@@ -1,7 +1,7 @@
+use log::info;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::process::Command;
-use log::info;
 
 pub static DOCKER_FILE_PATH: &str = "./Dockerfile";
 pub static DOCKER_FILE_LOCATION: &str = ".";
@@ -64,19 +64,25 @@ pub fn create_docker_file(binary_name: &str) -> Result<&str, &str> {
 ///
 /// This function returns the response in Result enum of &str(Status of building docker image)
 ///
-pub fn build_docker_image<'a>(docker_image_name: &'a str, docker_command: &'a str) -> &'a str {
+pub fn build_docker_image(docker_image_name: &str, docker_command: &str) -> Result<String, String> {
     info!("Processing...");
-    match Command::new(docker_command)
-        .args(&[
-            DOCKER_BUILD,
-            DOCKER_TAG,
-            docker_image_name,
-            DOCKER_FILE_LOCATION,
-        ])
-        .output()
-    {
-        Ok(_output) => SUCCESS_IMAGE,
-        Err(_command_error) => FAILURE_IMAGE,
+    let mut command = Command::new(docker_command);
+    command.args(&[
+        DOCKER_BUILD,
+        DOCKER_TAG,
+        docker_image_name,
+        DOCKER_FILE_LOCATION,
+    ]);
+    match &command.output() {
+        Ok(output) if output.status.success() => Ok(SUCCESS_IMAGE.into()),
+        Ok(output) => Err(format!(
+            "{}\nCommand: {:?}\n{:?}",
+            FAILURE_IMAGE, command, output
+        )),
+        Err(command_error) => Err(format!(
+            "{}\nCommand: {:?}\n{:?}",
+            FAILURE_IMAGE, command, command_error
+        )),
     }
 }
 
@@ -98,18 +104,18 @@ mod tests {
     }
 
     #[test]
-    fn test_build_docker_image() {
+    fn test_build_docker_image_success() {
         assert_eq!(
             build_docker_image("test", "docker"),
-            "Docker Image Successfully Build"
+            Ok(String::from("Docker Image Successfully Build"))
         );
     }
 
     #[test]
-    fn test_build_docker_file() {
+    fn test_build_docker_image_fail() {
         assert_eq!(
             build_docker_image("test", "./"),
-            "Unable To Build Docker Image"
+            Err(String::from("Unable To Build Docker Image\n\nOs { code: 13, kind: PermissionDenied, message: \"Permission denied\" }"))
         );
     }
 }
