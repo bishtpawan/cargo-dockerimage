@@ -115,7 +115,7 @@ mod tests {
     fn test_build_docker_image_fail() {
         assert_eq!(
             build_docker_image("test", "./"),
-            Err(String::from("Unable To Build Docker Image\n\nOs { code: 13, kind: PermissionDenied, message: \"Permission denied\" }"))
+            Err(String::from("Unable To Build Docker Image\nCommand: \"./\" \"build\" \"-t\" \"test\" \".\"\nOs { code: 13, kind: PermissionDenied, message: \"Permission denied\" }"))
         );
     }
 }
